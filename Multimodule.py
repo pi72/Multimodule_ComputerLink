@@ -6,6 +6,8 @@
 # * References: 
 #                1. https://github.com/opentx/opentx/blob/ea1133527313383b84f0ad3e58cb3f0f5463bca6/radio/src/pulses/multi.cpp
 #                2. https://github.com/pascallanger/DIY-Multiprotocol-TX-Module
+# 
+# * License: GNU GENERAL PUBLIC LICENSE http://www.gnu.org/licenses/gpl-2.0.html
 # *
 
 # ------------- #
