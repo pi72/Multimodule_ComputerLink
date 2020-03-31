@@ -2,13 +2,17 @@
 # * Created:     02th Feb 2019
 # * Revised:     28th Mar 2020
 # * Description: This code is to control a small drone by a computer
-# *              through a Multimodule. 
+#                through a Multimodule. 
+# * User advice: When setting your input channels (ail, elev, ...) be careful for direction.
+#                Set the correction factor (cf) for your model and multiply the inputs by the 
+#                cf if needed.             
 # * References: 
 #                1. https://github.com/opentx/opentx/blob/ea1133527313383b84f0ad3e58cb3f0f5463bca6/radio/src/pulses/multi.cpp
 #                2. https://github.com/pascallanger/DIY-Multiprotocol-TX-Module
 # 
 # * License: GNU GENERAL PUBLIC LICENSE http://www.gnu.org/licenses/gpl-2.0.html
 # *
+
 
 # ------------- #
 # -- Imports -- #
@@ -37,7 +41,7 @@ protoByte |= (model & 0x1f)
 subtypeByte = 0x07|(submodel&0x07)<<4 
 headerByte  = 0x55
 
-## setupFrame= ['M','P',0x80 (Module Config), 1 , 0x07 (0x01|0x02|0x04)]
+# setupFrame= ['M','P',0x80 (Module Config),1, 0x07 (0x01|0x02|0x04)]
 # setupFrame= [0x4D,0x50,0x80,1,0x07]
 
 bindFrame = [headerByte, protoByte, subtypeByte,0x00]
@@ -62,13 +66,16 @@ def controlInput():
     bitsavailable=0
     MULTI_CHAN_BITS=11
     channelBytes = []
-        
+    
+    # Reference 1:
+    # byte 4-25, channels 0..2047
+    # ** Multi uses [204;1843] as [-100%;100%]    
     ail=1024
     elev=1023
     thr=204
     rud=1023
 
-    channels = [ail,elev,thr,rud] + 12*[1023]
+    channels = [ail,elev,thr,rud] + 2*[1023] # Setting up 6 channels (you may need to set more channels). More chans = slower serial comms and lag! 
     channels[5] = 1800
         
     for value in channels:
